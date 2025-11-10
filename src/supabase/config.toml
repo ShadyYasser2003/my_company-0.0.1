@@ -1,0 +1,38 @@
+# Supabase Project Configuration
+# This project uses DIRECT DATABASE ACCESS via @supabase/supabase-js
+# Edge Functions are DISABLED and should NOT be deployed
+
+project_id = "TSxjfnhOViwipJp0rD9vn5"
+
+[api]
+# Enable REST API for direct database access
+enabled = true
+port = 54321
+
+[db]
+# PostgreSQL database configuration
+port = 54322
+
+[studio]
+# Supabase Studio
+enabled = true
+port = 54323
+
+[edge_runtime]
+# DISABLE edge functions - not used in this project
+enabled = false
+
+[functions]
+# DISABLE edge functions deployment
+enabled = false
+# Do not attempt to deploy any functions
+verify_jwt = false
+
+[auth]
+# Enable Supabase Auth
+enabled = true
+site_url = "http://localhost:5173"
+
+[storage]
+# Enable Supabase Storage
+enabled = true

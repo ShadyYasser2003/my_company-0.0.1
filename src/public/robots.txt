@@ -1,0 +1,25 @@
+# robots.txt for SOF for Software
+# Allow all search engines to crawl the entire site
+
+User-agent: *
+Allow: /
+
+# Disallow admin panel from search engines
+Disallow: /admin
+Disallow: /#/admin
+
+# Allow Google, Bing, and other search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Sitemap location
+Sitemap: https://sofsoftware.com/sitemap.xml
+
+# Crawl-delay (optional, in seconds)
+Crawl-delay: 1

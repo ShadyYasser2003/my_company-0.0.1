@@ -1,0 +1,203 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                       🎯 STATES CONTROL QUICK REFERENCE                      ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  📍 LOCATION                                                                 ║
+║  └─ Admin Dashboard → Settings → States Tab                                 ║
+║                                                                              ║
+║  💾 DATABASE                                                                 ║
+║  └─ Table: global_settings                                                   ║
+║  └─ Key: site_config                                                         ║
+║  └─ Column: settings (JSONB)                                                 ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                            CONTROLLED VALUES                                 ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  📊 COMPANY STATISTICS                                                       ║
+║  ├─ Founded Year ................... company.foundedYear                     ║
+║  │  └─ Type: Integer, Default: 2020                                          ║
+║                                                                              ║
+║  📍 LOCATION COORDINATES                                                     ║
+║  ├─ Latitude ....................... contact.latitude                        ║
+║  │  └─ Type: Float, Range: -90 to 90                                         ║
+║  ├─ Longitude ...................... contact.longitude                       ║
+║  │  └─ Type: Float, Range: -180 to 180                                       ║
+║  └─ Preview: Live Google Maps link                                           ║
+║                                                                              ║
+║  🌐 GLOBAL PRESENCE METRICS (Homepage)                                       ║
+║  ├─ Global Projects ................ 500+                                    ║
+║  ├─ Countries Served ............... 45+                                     ║
+║  ├─ Uptime SLA ..................... 99%                                     ║
+║  └─ Support Available .............. 24/7                                    ║
+║      └─ Path: home.globalPresence.metrics[]                                  ║
+║                                                                              ║
+║  ⚙️ DEVOPS METRICS (Homepage)                                                ║
+║  ├─ Faster Deployments ............. 85%                                     ║
+║  ├─ Cost Reduction ................. 70%                                     ║
+║  ├─ Success Rate ................... 99%                                     ║
+║  └─ Continuous Monitoring .......... 24/7                                    ║
+║      └─ Path: home.devops.metrics[]                                          ║
+║                                                                              ║
+║  🔀 CI/CD PIPELINE METRICS (Homepage)                                        ║
+║  ├─ Deploy Time .................... 8 min                                   ║
+║  ├─ Tests Passed ................... 100%                                    ║
+║  └─ Issues Found ................... 0                                       ║
+║      └─ Path: home.cicdPipeline.metrics[]                                    ║
+║                                                                              ║
+║  ⚡ PERFORMANCE METRICS (Homepage)                                           ║
+║  ├─ Response Time .................. 200 ms                                  ║
+║  ├─ Code Coverage .................. 95%                                     ║
+║  ├─ Active Users ................... 2M+                                     ║
+║  └─ CPU Efficiency ................. 92%                                     ║
+║      └─ Path: home.performance.metrics[]                                     ║
+║                                                                              ║
+║  📧 CONTACT FORM SETTINGS                                                    ║
+║  └─ Success Timeout ................ 3000 ms                                 ║
+║      └─ Path: contactPage.form.successTimeoutMs                              ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                           HOW TO UPDATE VALUES                               ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  STEP 1: Access States Tab                                                   ║
+║  └─ Navigate to: /#/admin/settings                                           ║
+║  └─ Click: "States" tab                                                      ║
+║                                                                              ║
+║  STEP 2: Expand Section                                                      ║
+║  └─ Click on any accordion to expand                                         ║
+║  └─ View all related numeric controls                                        ║
+║                                                                              ║
+║  STEP 3: Edit Values                                                         ║
+║  └─ Update numeric values in input fields                                    ║
+║  └─ Use appropriate data types:                                              ║
+║      ├─ Integer: whole numbers (2020, 500, 85)                               ║
+║      └─ Float: decimals (30.5729164, 31.006873)                              ║
+║                                                                              ║
+║  STEP 4: Save Changes                                                        ║
+║  └─ Click "Save All Changes" button (top right)                              ║
+║  └─ Wait for success message                                                 ║
+║  └─ Page will auto-reload                                                    ║
+║                                                                              ║
+║  STEP 5: Verify                                                              ║
+║  └─ Visit public website                                                     ║
+║  └─ Check relevant pages (Home, Contact)                                     ║
+║  └─ Confirm numeric values updated                                           ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                          METRIC OBJECT STRUCTURE                             ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  Each metric object contains:                                                ║
+║                                                                              ║
+║  {                                                                           ║
+║    value: 500,              // The numeric value                             ║
+║    suffix: '+',             // Display suffix (%, +, M+, /7, min, ms)        ║
+║    label: 'Global Projects', // Display label                                ║
+║    sublabel: 'Delivered Successfully', // Additional context                 ║
+║    description: 'Info text', // Optional description                         ║
+║    icon: 'IconName'         // Optional icon                                 ║
+║  }                                                                           ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                              DATA FLOW                                       ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  User Input → React State → Database Save → Page Reload →                   ║
+║  SettingsContext → Component Rendering                                       ║
+║                                                                              ║
+║  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐                  ║
+║  │ Admin Panel  │───▶│   Database   │───▶│   Website    │                  ║
+║  │ (Edit Values)│    │(global_settings)│  │(Display Values)│                 ║
+║  └──────────────┘    └──────────────┘    └──────────────┘                  ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                             TROUBLESHOOTING                                  ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  ❌ VALUES NOT UPDATING?                                                     ║
+║  └─ Did you click "Save All Changes"?                                        ║
+║  └─ Did you reload the page? (Ctrl+Shift+R)                                  ║
+║  └─ Check browser console for errors                                         ║
+║  └─ Verify database connection                                               ║
+║                                                                              ║
+║  ❌ WRONG VALUES DISPLAYING?                                                 ║
+║  └─ Check you're editing the correct metric                                  ║
+║  └─ Verify data type (integer vs float)                                      ║
+║  └─ Check for typos in suffixes                                              ║
+║                                                                              ║
+║  ❌ MAP NOT SHOWING LOCATION?                                                ║
+║  └─ Verify coordinates are valid                                             ║
+║  └─ Use decimal format with dots (30.57, not 30,57)                          ║
+║  └─ Test with "Preview on Google Maps" link                                  ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                             BEST PRACTICES                                   ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  ✅ Keep values realistic and accurate                                       ║
+║  ✅ Round numbers for simplicity (500 vs 487)                                ║
+║  ✅ Use appropriate suffixes (%, +, M+, /7)                                  ║
+║  ✅ Update regularly to reflect growth                                       ║
+║  ✅ Test after each change                                                   ║
+║  ✅ Maintain consistency across metrics                                      ║
+║  ✅ Document custom values and changes                                       ║
+║  ✅ Keep backups of important metrics                                        ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                            TECHNICAL DETAILS                                 ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  FILES MODIFIED:                                                             ║
+║  ├─ /pages/admin/AdminSettingsEnhanced.tsx .... New "States" tab            ║
+║  ├─ /config/global.tsx ........................ Numeric value definitions    ║
+║  └─ Database: global_settings ................. Value storage               ║
+║                                                                              ║
+║  IMPLEMENTATION:                                                             ║
+║  ├─ Frontend: React + TypeScript                                             ║
+║  ├─ State Management: React useState                                         ║
+║  ├─ Database: Supabase PostgreSQL                                            ║
+║  ├─ Context: SettingsContext                                                 ║
+║  └─ UI: Shadcn/ui components + Tailwind CSS                                  ║
+║                                                                              ║
+║  API FUNCTIONS:                                                              ║
+║  ├─ fetchSettingsFromDB() .............. Load settings from database         ║
+║  ├─ saveSettingsToDB() ................. Save settings to database           ║
+║  └─ updateSetting() .................... Update local React state            ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                           QUICK ACTION COMMANDS                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  ACCESS STATES TAB:                                                          ║
+║  └─ URL: /#/admin/settings → States tab                                      ║
+║                                                                              ║
+║  VIEW CURRENT DATABASE VALUES:                                               ║
+║  └─ SQL: SELECT settings FROM global_settings WHERE key = 'site_config';     ║
+║                                                                              ║
+║  RESET TO DEFAULTS:                                                          ║
+║  └─ Delete database record and reload page to use global.tsx defaults        ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                          RELATED DOCUMENTATION                               ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  📚 Full Documentation:                                                      ║
+║  ├─ /STATES_CONTROL_GUIDE.md ............... Complete guide                 ║
+║  ├─ /NUMBERS_CONTROL_GUIDE.md .............. Previous migration             ║
+║  ├─ /SETTINGS_MASTER_GUIDE.md .............. Master settings guide          ║
+║  ├─ /DATABASE_ARCHITECTURE.md .............. Database structure             ║
+║  └─ /config/GLOBAL_CONFIG_GUIDE.md ......... Global config reference        ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                            VERSION INFORMATION                               ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  Version: 1.0.0                                                              ║
+║  Last Updated: November 8, 2025                                              ║
+║  Status: ✅ Active & Production-Ready                                        ║
+║  Total Controlled Values: 20+ numeric values                                 ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝

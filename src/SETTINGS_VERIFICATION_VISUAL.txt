@@ -1,0 +1,371 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    SETTINGS VERIFICATION SYSTEM                              ║
+║                         Visual Quick Reference                               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                         WHAT GETS VERIFIED                                   │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────┐
+    │ 1. TABLE CHECK  │  ──► Does global_settings table exist?
+    └─────────────────┘
+
+    ┌─────────────────┐
+    │ 2. DB FETCH     │  ──► Can we read from database?
+    └─────────────────┘
+
+    ┌─────────────────┐
+    │ 3. HOOK CHECK   │  ──► Is hook loading from DB or global.tsx? ⭐
+    └─────────────────┘
+
+    ┌─────────────────┐
+    │ 4. VAR COUNT    │  ──► How many variables in each source?
+    └─────────────────┘
+
+    ┌─────────────────┐
+    │ 5. SAVE TEST    │  ──► Can we write to database?
+    └─────────────────┘
+
+    ┌─────────────────┐
+    │ 6. FINAL CHECK  │  ──► Overall pass/fail status
+    └─────────────────┘
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                         DATA FLOW DIAGRAM                                    │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+    CORRECT FLOW (Database-Driven):
+    ═══════════════════════════════════
+
+    Admin Changes Setting
+            │
+            ▼
+    Click "Save All Changes"
+            │
+            ▼
+    ┌─────────────────────┐
+    │  global_settings    │ ◄── Data stored here
+    │       table         │
+    └─────────────────────┘
+            │
+            ▼
+    useGlobalConfig() hook
+            │
+            ▼
+    loadSettings() fetches from DB
+            │
+            ▼
+    Website displays DB values ✅
+
+
+    INCORRECT FLOW (Hardcoded):
+    ════════════════════════════
+
+    Admin Changes Setting
+            │
+            ▼
+    Click "Save All Changes"
+            │
+            ▼
+    ┌─────────────────────┐
+    │  global_settings    │ ◄── Data stored here
+    │       table         │
+    └─────────────────────┘
+            │
+            X (Not loaded)
+            │
+    useGlobalConfig() hook
+            │
+            ▼
+    Returns GLOBAL_CONFIG defaults
+            │
+            ▼
+    Website displays hardcoded values ❌
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                     THREE DATA SOURCES EXPLAINED                             │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+    1. DEFAULT CONFIG (global.tsx)
+    ┌────────────────────────────────┐
+    │  /config/global.tsx            │
+    │  ─────────────────────────────  │
+    │  export const GLOBAL_CONFIG = {│
+    │    company: {                  │
+    │      name: 'SOF for Software', │
+    │      ...                       │
+    │    }                           │
+    │  }                             │
+    └────────────────────────────────┘
+         │
+         ├──► Purpose: Fallback/defaults
+         ├──► Should NOT be primary source
+         └──► Only used if DB fails
+
+
+    2. DATABASE (global_settings)
+    ┌────────────────────────────────┐
+    │  Supabase Table                │
+    │  ─────────────────────────────  │
+    │  key: 'site_config'            │
+    │  settings: {                   │
+    │    company: {                  │
+    │      name: 'Your Company',     │
+    │      ...                       │
+    │    }                           │
+    │  }                             │
+    └────────────────────────────────┘
+         │
+         ├──► Purpose: Live settings
+         ├──► Should be PRIMARY source
+         └──► Editable via admin
+
+
+    3. LIVE HOOK DATA (Runtime)
+    ┌────────────────────────────────┐
+    │  useGlobalConfig() returns     │
+    │  ─────────────────────────────  │
+    │  {                             │
+    │    company: {                  │
+    │      name: ???,  ◄── From DB or defaults?
+    │      ...                       │
+    │    }                           │
+    │  }                             │
+    └────────────────────────────────┘
+         │
+         ├──► What website actually uses
+         └──► MUST match database!
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                         VERIFICATION RESULTS                                 │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+    PERFECT RESULT:
+    ═══════════════
+
+    ✅ Table exists and is accessible
+    ✅ Successfully fetched settings from database (150 root keys)
+    ✅ Hook is loading values from DATABASE
+    ✅ Database: 150 variables | Live: 150 variables | Default: 150 variables
+    ✅ Successfully saved test data to database
+    ✅ Verified: Saved data matches what was written
+    ✅ ALL CHECKS PASSED - System is working correctly
+
+
+    COMMON WARNING:
+    ═══════════════
+
+    ✅ Table exists and is accessible
+    ⚠️  No settings found in database (not initialized yet)
+    ⚠️  Hook is loading DEFAULT values from global.tsx (NOT from database)
+    ⚠️  Database: 0 variables | Live: 150 variables | Default: 150 variables
+
+    ➜ ACTION: Go to /admin/global-settings-init and initialize!
+
+
+    CRITICAL ERROR:
+    ═══════════════
+
+    ❌ Table does not exist or is not accessible
+    ❌ Error fetching from database
+    ⚠️  Hook is loading DEFAULT values from global.tsx
+
+    ➜ ACTION: Go to /admin/database-setup and create table!
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                         HOW TO USE VERIFICATION                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+    STEP 1: Access Verification
+    ════════════════════════════
+    URL: /admin/settings-verification
+    Or: Click "Verify DB" in admin navigation
+
+
+    STEP 2: Run Verification
+    ═════════════════════════
+    → Auto-runs on page load
+    → Or click "Run Verification" button
+
+
+    STEP 3: Review Results
+    ═══════════════════════
+    Check each step:
+    
+    ┌─────────────────────────────────────┐
+    │ ✅ Database Table Check             │
+    │ ✅ Database Fetch                   │
+    │ ✅ Hook Loading Check               │ ◄── MOST IMPORTANT!
+    │ ℹ️  Variable Count                  │
+    │ ✅ Save Test                        │
+    │ ✅ Save Verification                │
+    │ ✅ Final Summary                    │
+    └─────────────────────────────────────┘
+
+
+    STEP 4: Compare Data
+    ═════════════════════
+    Look at side-by-side panels:
+
+    ┌──────────────────┐  ┌──────────────────┐
+    │ Database Data    │  │ Live Hook Data   │
+    │ ────────────────  │  │ ────────────────  │
+    │ Name: SOF        │  │ Name: SOF        │ ◄── Should match!
+    │ Email: test@...  │  │ Email: test@...  │ ◄── Should match!
+    │ Phone: +20...    │  │ Phone: +20...    │ ◄── Should match!
+    └──────────────────┘  └──────────────────┘
+
+
+    STEP 5: Export Report (Optional)
+    ═════════════════════════════════
+    Click "Export Report" → saves JSON file
+    Use for debugging or records
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                         VERIFICATION WORKFLOW                                │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+    ┌──────────────────────────────────────────────────────────────┐
+    │                                                              │
+    │  1. Make changes in /admin/settings                          │
+    │                         │                                    │
+    │                         ▼                                    │
+    │  2. Click "Save All Changes"                                 │
+    │                         │                                    │
+    │                         ▼                                    │
+    │  3. Wait for success message                                 │
+    │                         │                                    │
+    │                         ▼                                    │
+    │  4. Go to /admin/settings-verification                       │
+    │                         │                                    │
+    │                         ▼                                    │
+    │  5. Check "Hook Loading Check" step                          │
+    │                         │                                    │
+    │                         ▼                                    │
+    │  6. Verify: "✓ Hook is loading values from DATABASE"         │
+    │                         │                                    │
+    │                         ▼                                    │
+    │  7. Compare Database Data vs Live Hook Data                  │
+    │                         │                                    │
+    │                         ▼                                    │
+    │  8. Confirm they match ✅                                    │
+    │                                                              │
+    └──────────────────────────────────────────────────────────────┘
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                         TROUBLESHOOTING MAP                                  │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+    PROBLEM: Hook loading from global.tsx
+    ════════════════════════════════════════
+    
+    ⚠️  Hook is loading DEFAULT values from global.tsx
+    
+    FIX:
+    1. /admin/global-settings-init
+    2. Click "Initialize Settings in Database"
+    3. /admin/settings
+    4. Click "Save All Changes"
+    5. Verify again
+
+
+    PROBLEM: Table doesn't exist
+    ════════════════════════════
+    
+    ❌ Table does not exist or is not accessible
+    
+    FIX:
+    1. /admin/database-setup
+    2. Copy SQL commands
+    3. Paste in Supabase SQL Editor
+    4. Run SQL
+    5. Verify again
+
+
+    PROBLEM: Can't save
+    ═══════════════════
+    
+    ❌ Not authenticated
+    
+    FIX:
+    1. Sign out
+    2. Sign in again
+    3. Try save again
+
+
+    PROBLEM: Data mismatch
+    ══════════════════════
+    
+    Database shows X, Live shows Y
+    
+    FIX:
+    1. Clear browser cache
+    2. Hard refresh (Ctrl+Shift+R)
+    3. Check verification again
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                         QUICK REFERENCE                                      │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+    ACCESS POINTS:
+    ══════════════
+    Verification:     /admin/settings-verification
+    Settings Editor:  /admin/settings
+    Initialize:       /admin/global-settings-init
+    Database Setup:   /admin/database-setup
+
+
+    STATUS ICONS:
+    ═════════════
+    ✅ = Success (green) - Working correctly
+    ⚠️  = Warning (yellow) - Needs attention
+    ❌ = Error (red) - Critical issue
+    ℹ️  = Info (blue) - Informational
+
+
+    KEY METRICS:
+    ════════════
+    Database Variables:  Should be 150+
+    Live Variables:      Should be 150+
+    Default Variables:   Always 150
+    
+    Database = Live  ✅ Correct
+    Live = Default   ⚠️  Problem!
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                         EXPECTED VALUES                                      │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+    AFTER INITIALIZATION:
+    ═════════════════════
+
+    Variable Count:
+    • Database:  150-200 variables
+    • Live:      150-200 variables
+    • Default:   150 variables (static)
+
+    Data Source:
+    • Hook loading from: DATABASE ✅
+    • NOT loading from: global.tsx ❌
+
+    Save Test:
+    • Can write to DB: ✅
+    • Can read back:   ✅
+    • Data matches:    ✅
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                         END OF VISUAL GUIDE                                  ║
+║                                                                              ║
+║  For detailed instructions, see: SETTINGS_VERIFICATION_GUIDE.md             ║
+║  For step-by-step checklist, see: VERIFICATION_CHECKLIST.md                 ║
+╚══════════════════════════════════════════════════════════════════════════════╝

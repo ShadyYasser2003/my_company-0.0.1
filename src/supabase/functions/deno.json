@@ -1,0 +1,13 @@
+{
+  "tasks": {
+    "deploy": "echo '⚠️  Edge functions are DISABLED in this project. Use direct database access via /utils/database.tsx instead.' && exit 1"
+  },
+  "compilerOptions": {
+    "allowJs": false,
+    "allowUnreachableCode": false,
+    "noEmit": true
+  },
+  "exclude": [
+    "**/*"
+  ]
+}
