@@ -25,6 +25,7 @@ const BUCKET_NAME = 'make-ea0e3e7d-project-images';
   }
 })();
 
+
 // ============== AUTH ROUTES ==============
 
 // Sign up (admin creation)
